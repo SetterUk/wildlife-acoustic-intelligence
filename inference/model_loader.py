@@ -8,11 +8,6 @@ import time
 import logging
 from typing import Optional, Tuple, Dict, Any
 
-# Ensure offline huggingface loading once cached
-os.environ["HF_HUB_OFFLINE"] = "1"
-os.environ["TRANSFORMERS_OFFLINE"] = "1"
-os.environ["HF_DATASETS_OFFLINE"] = "1"
-
 import numpy as np
 import torch
 import torch.nn as nn
@@ -66,8 +61,13 @@ class HFCLAPContrastive(nn.Module):
         proj_out_dim: int = 512
     ):
         super().__init__()
-        self.processor = ClapProcessor.from_pretrained(model_id, local_files_only=True)
-        self.backbone = ClapModel.from_pretrained(model_id, use_safetensors=True, local_files_only=True)
+        try:
+            self.processor = ClapProcessor.from_pretrained(model_id, local_files_only=True)
+            self.backbone = ClapModel.from_pretrained(model_id, use_safetensors=True, local_files_only=True)
+        except Exception:
+            logger.info(f"Downloading {model_id} from Hugging Face Hub...")
+            self.processor = ClapProcessor.from_pretrained(model_id, local_files_only=False)
+            self.backbone = ClapModel.from_pretrained(model_id, use_safetensors=True, local_files_only=False)
         self.logit_scale = nn.Parameter(torch.tensor(np.log(1 / 0.07), dtype=torch.float32))
 
         feat_dim = getattr(getattr(self.backbone, "config", object()), "projection_dim", 512)
@@ -156,7 +156,14 @@ class AnimalCLAPManager:
             checkpoint_path = os.path.join(base_dir, "checkpoints", "animalclap_epoch020.pth")
 
         if not os.path.exists(checkpoint_path):
-            raise FileNotFoundError(f"AnimalCLAP checkpoint not found at: {checkpoint_path}")
+            logger.info(f"Checkpoint not found at {checkpoint_path}. Downloading from Hugging Face (risashinoda/animalclap)...")
+            os.makedirs(os.path.dirname(checkpoint_path), exist_ok=True)
+            from huggingface_hub import hf_hub_download
+            checkpoint_path = hf_hub_download(
+                repo_id="risashinoda/animalclap",
+                filename="animalclap_epoch020.pth",
+                local_dir=os.path.dirname(checkpoint_path)
+            )
 
         # Determine target device
         if force_device:
