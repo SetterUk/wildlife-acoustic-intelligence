@@ -1,0 +1,24 @@
+# Python virtual environment
+.venv/
+env/
+venv/
+__pycache__/
+*.py[cod]
+
+# Model weights
+checkpoints/*.pth
+checkpoints/*.bin
+*.safetensors
+
+# Temporary and download files
+*.download
+*.tmp
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# IDE and Editor files
+.vscode/
+.idea/
+

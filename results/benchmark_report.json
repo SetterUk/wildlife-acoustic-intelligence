@@ -1,0 +1,39 @@
+{
+  "system_info": {
+    "os": "Windows 11 (Build 10.0.26300)",
+    "cpu": "Intel64 Family 6 Model 191 Stepping 2, GenuineIntel",
+    "cpu_physical_cores": 16,
+    "cpu_total_cores": 24,
+    "system_ram_gb": 15.73,
+    "pytorch_version": "2.6.0+cu124",
+    "cuda_available": true,
+    "cuda_version": "12.4",
+    "gpu_name": "NVIDIA GeForce RTX 4050 Laptop GPU",
+    "dedicated_vram_gb": 6.0
+  },
+  "model_loading": {
+    "load_time_sec": 1.79,
+    "checkpoint_size_mb": 590.12,
+    "device": "cuda"
+  },
+  "gpu_performance": {
+    "device": "NVIDIA GeForce RTX 4050 Laptop GPU",
+    "average_latency_sec": 0.3234,
+    "min_latency_sec": 0.2708,
+    "max_latency_sec": 0.3971,
+    "peak_vram_mb": 685.67,
+    "vram_utilization_pct": 11.16,
+    "throughput_inferences_per_sec": 3.09
+  },
+  "cpu_performance": {
+    "device": "CPU Fallback",
+    "average_latency_sec": 0.7742,
+    "min_latency_sec": 0.7081,
+    "max_latency_sec": 0.8094,
+    "throughput_inferences_per_sec": 1.29
+  },
+  "acceleration_metrics": {
+    "gpu_speedup_factor": 2.39,
+    "latency_reduction_pct": 58.23
+  }
+}
